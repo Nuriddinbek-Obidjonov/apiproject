@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 function Login() {
   
-  const API = 'https://documenter.getpostman.com/view/24974792/2s935oL3qs#a3140778-856f-46f3-be53-8899ea983868/auth/signin'
+  const API = 'https://documenter.getpostman.com/view/24974792/2s935oL3qs#a3140778-856f-46f3-be53-8899ea983868'
   
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
@@ -11,7 +11,7 @@ function Login() {
 
   const logInSite = (e) => {
     e.preventDefault()
-    fetch('https://documenter.getpostman.com/view/24974792/2s935oL3qs#a3140778-856f-46f3-be53-8899ea983868/auth/signin', {
+    fetch(API, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
