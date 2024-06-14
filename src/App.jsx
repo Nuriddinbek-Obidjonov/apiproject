@@ -14,13 +14,16 @@ import Cities from './pages/Cities'
 import Locations from './pages/Locations'
 import Cars from './pages/Cars'
 import Models from './pages/Models'
+import { useState } from 'react'
 
 function App() {
 
+  const [loginSuccess, setLoginSuccess] = useState(false)
+
   const routes = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<Layout/>}>
-        <Route path='/' element={<Login/>}/>
+      <Route element={<Layout loginSuccess={loginSuccess}/>}>
+        <Route path='/' element={<Login setLoginSuccess={setLoginSuccess}/>}/>
         <Route path='/author' element={<Author/>}/>
         <Route path='/categories' element={<Categories/>}/>
         <Route path='/brands' element={<Brands/>}/>
