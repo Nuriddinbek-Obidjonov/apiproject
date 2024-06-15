@@ -9,7 +9,7 @@ import Layout from './layout/Layout'
 import Login from './pages/Login'
 import Author from './pages/Author'
 import Categories from './pages/Categories'
-import Brands from './pages/Brands'
+import Brands from './pages/Brands/Brands';
 import Cities from './pages/Cities'
 import Locations from './pages/Locations'
 import Cars from './pages/Cars'
