@@ -66,7 +66,7 @@ function Categories() {
   const handleEditModalOpen = (item) => {
     setId(item.id)
     setOpenEditModal(true);
-    setData({...data, name_en: item.name_en, name_ru: item.name_ru, images: item.image_src})
+    setData({...data, name_en: item.name_en, name_ru: item.name_ru})
   };
 
   const editCategory = (e) => {
@@ -74,7 +74,8 @@ function Categories() {
     const formData = new FormData()
     formData.append('name_en', data.name_en)
     formData.append('name_ru', data.name_ru)
-    formData.append('images', data.images)
+    if(data.images){
+      formData.append('images', data.images)}
     fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/categories/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
