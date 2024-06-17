@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 import { Modal, Popover, Button, message } from 'antd';
 import React, { useEffect, useState } from 'react';
->>>>>>> 1177c8779a83d850ced85b3c1b302bf5a88302ac
 
 function Categories() {
   const [category, setCategory] = useState([]);
