@@ -7,7 +7,7 @@ import {
 
 import Layout from './layout/Layout'
 import Login from './pages/Login'
-import Author from './pages/Author'
+import Home from './pages/Home'
 import Categories from './pages/Categories'
 import Brands from './pages/Brands'
 import Cities from './pages/Cities'
@@ -18,13 +18,13 @@ import { useState } from 'react'
 
 function App() {
 
-  const [loginSuccess, setLoginSuccess] = useState(false)
+  const [loginSuccess, setLoginSuccess] = useState(localStorage.getItem('loginSuccess') || false)
 
   const routes = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<Layout loginSuccess={loginSuccess}/>}>
+      <Route element={<Layout loginSuccess={loginSuccess} setLoginSuccess={setLoginSuccess}/>}>
         <Route path='/' element={<Login setLoginSuccess={setLoginSuccess}/>}/>
-        <Route path='/author' element={<Author/>}/>
+        <Route path='/home' element={<Home/>}/>
         <Route path='/categories' element={<Categories/>}/>
         <Route path='/brands' element={<Brands/>}/>
         <Route path='/cities' element={<Cities/>}/>

@@ -8,6 +8,10 @@
     padding: 0;
 }
 
+body {
+    padding: 70px 0;
+}
+
 nav a {
     padding: 5px 10px;
     margin: 5px 0;

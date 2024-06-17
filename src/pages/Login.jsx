@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 function Login({ setLoginSuccess }) {
@@ -8,6 +8,19 @@ function Login({ setLoginSuccess }) {
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+    if (token) {
+      navigate('/home')
+      setLoginSuccess(true)
+      localStorage.setItem('loginSuccess', true)
+    } else {
+      navigate('/')
+      setLoginSuccess(false)
+      localStorage.setItem('loginSuccess', false)
+    }
+  }, [])
 
   const logInSite = (e) => {
     e.preventDefault()
@@ -29,9 +42,11 @@ function Login({ setLoginSuccess }) {
           document.getElementById('phone').value = ''
           document.getElementById('password').value = ''
           setLoginSuccess(true)
-          navigate('/author')
+          localStorage.setItem('loginSuccess', true)
+          navigate('/home')
         } else {
           setLoginSuccess(false)
+          localStorage.setItem('loginSuccess', false)
           document.getElementById('login_error_message').textContent = 'Phone number or password is wrong!!!'
           setTimeout(() => {
             document.getElementById('login_error_message').textContent = ''
