@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 
 function Cars() {
 
@@ -9,17 +11,17 @@ function Cars() {
   const [createCar, setCreateCar] = useState(false)
   const [editCarModal, setEditCarModal] = useState(false)
   const [editCarId, setEditeCarId] = useState('')
+  const [a, setA] = useState(0)
 
   // Fetching all car's information
   useEffect(() => {
     fetch(APICARS).then((res) => res.json()).then((data) => {
-      console.log(data.data)
       setCars(data.data)
     }).catch((err) => console.log(err))
-  }, [])
+  }, [a])
 
   // Creating car to use adding or editing
-  const [car, setCar] = useState({})
+  const [car, setCar] = useState({name_en: '', name_ru: '', images: ''})
 
   // Adding new car
   const addCar = (e) => {
@@ -37,26 +39,16 @@ function Cars() {
       },
       body: formData
     })
-  }
-
-  // Deleteing car
-  const deleteCar = (e) => {
-    const newCars = cars.filter((car) => {
-      if (car.id !== e.target.id) {
-        return car
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success === true) {
+        toast.success('New car was added!')
+        setA(a + 1)
+      } else if (data.success === false) {
+        toast.error('Ooops, we detected some problem, try again later!')
       }
     })
-
-    fetch(`${APICARS}${e.target.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-      }
-    }).then((res) => res.json()).then((data) => {
-      if (data.success == true) {
-        setCars(newCars)
-      }
-    }).catch((err) => console.log(err))
+    .catch((err) => console.log(err))
   }
 
   // Editing car
@@ -75,6 +67,37 @@ function Cars() {
       },
       body: formData
     })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success === true) {
+        toast.success('The car was edited!')
+        setA(a + 1)
+      } else if (data.success === false) {
+        toast.error('Ooops, we detected some problem, try again later!')
+      }
+    })
+    .catch((err) => console.log(err))
+  }
+  
+  // Deleteing car
+  const deleteCar = (e) => {
+    
+    fetch(`${APICARS}${e.target.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success === true) {
+        toast.success('The car was deleted!')
+        setA(a + 1)
+      } else if (data.success === false) {
+        toast.error('Ooops, we detected some problem, try again later!')
+      }
+    })
+    .catch((err) => console.log(err))
   }
 
   return (
@@ -86,7 +109,7 @@ function Cars() {
         }}>Add Car</button>
       </div>
 
-      {/* Adding new car */}
+      {/* Adding new car form */}
       <div id="add_car_modal" className={`${createCar ? '' : 'hidden'} p-5 bg-gray-300/20 backdrop-blur fixed top-0 left-0 right-0 bottom-0 z-[100]`} onClick={(e) => {
             if (e.target == document.getElementById('add_car_modal')) {
               setCreateCar(false)
@@ -109,7 +132,7 @@ function Cars() {
         </form>
       </div>
 
-      {/* Editing car */}
+      {/* Editing car form */}
       <div id="edit_car_modal" className={`${editCarModal ? '' : 'hidden'} p-5 bg-gray-300/20 backdrop-blur fixed top-0 left-0 right-0 bottom-0 z-[100]`} onClick={(e) => {
             if (e.target == document.getElementById('edit_car_modal')) {
               setEditCarModal(false)
@@ -154,11 +177,11 @@ function Cars() {
                 <td></td>
                 <td></td>
                 <td>
-                  <button id={car.id} className="bg-red-400 rounded mx-1 p-1 w-[80px]" onClick={deleteCar}>Delete</button>
                   <button id={car.id} className="bg-blue-400 rounded mx-1 p-1 w-[80px]" onClick={(e) => {
                     setEditeCarId(e.target.id)
                     setEditCarModal(true)
                   }}>Edit</button>
+                  <button id={car.id} className="bg-red-400 rounded mx-1 p-1 w-[80px]" onClick={deleteCar}>Delete</button>
                 </td>
               </tr>
             )
@@ -166,6 +189,7 @@ function Cars() {
         </tbody>
         <tfoot></tfoot>
       </table>
+      <ToastContainer />
     </div>
   )
 }
