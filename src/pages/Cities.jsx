@@ -7,6 +7,7 @@ function Cities() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openPopover, setOpenPopover] = useState(null);
   const [id, setId] = useState(null);
+  const [data, setData] = useState({ name: '', text: '', images: null });
 
   const hidePopover = () => {
     setOpenPopover(null);
@@ -16,11 +17,14 @@ function Cities() {
     setOpenPopover(newOpen ? id : null);
   };
 
-  const [data, setData] = useState({ name: '', text: '', images: null });
+  const handleImageChange = (e) => {
+    setData({ ...data, images: e.target.files[0] });
+  };
+
   const urlImage = 'https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/';
   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTczNzkzNTUtZDNjYi00NzY1LTgwMGEtNDZhOTU1NWJiOWQyIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxNzI1OTkxOSwiZXhwIjoxNzQ4Nzk1OTE5fQ.NZApBzV3gHG4vel-wbdHS29Z9eAp13w6ChrwjHJCwuM';
 
-  const getCategory = () => {
+  const getCity = () => {
     fetch('https://autoapi.dezinfeksiyatashkent.uz/api/cities')
       .then((res) => res.json())
       .then((category) => {
@@ -47,7 +51,7 @@ function Cities() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          getCategory();
+          getCity();
           handleModalClose();
         } else {
           message.error('Error adding city');
@@ -60,7 +64,7 @@ function Cities() {
   };
 
   useEffect(() => {
-    getCategory();
+    getCity();
   }, []);
 
   const handleModalOpen = () => {
@@ -69,6 +73,7 @@ function Cities() {
 
   const handleModalClose = () => {
     setOpenModal(false);
+    resetFormData();
   };
 
   const handleEditModalOpen = (item) => {
@@ -94,8 +99,9 @@ function Cities() {
       .then((res) => {
         if (res.success) {
           message.success('City updated successfully');
-          getCategory();
+          getCity();
           handleEditModalClose();
+          resetFormData();
         } else {
           message.error('Error updating city');
         }
@@ -108,6 +114,7 @@ function Cities() {
 
   const handleEditModalClose = () => {
     setOpenEditModal(false);
+    resetFormData();
   };
 
   const handleDelete = (id) => {
@@ -119,7 +126,7 @@ function Cities() {
     })
       .then((res) => res.json())
       .then(() => {
-        getCategory();
+        getCity();
         hidePopover();
         message.success('City deleted successfully');
       })
@@ -127,6 +134,10 @@ function Cities() {
         console.error(error);
         message.error('Error deleting city');
       });
+  };
+
+  const resetFormData = () => {
+    setData({ name: '', text: '', images: null });
   };
 
   return (
@@ -268,19 +279,20 @@ function Cities() {
             <input
               type="file"
               className="w-full p-[8px] border border-[#e5e7eb] rounded"
-              onChange={(e) => setData({ ...data, images: e.target.files[0] })}
+              onChange={handleImageChange}
             />
             {data.images && (
               <img className="w-[100px] mt-[15px]" src={`${urlImage}${data.images}`} alt="Selected Image" />
             )}
           </div>
           <div className="text-right">
-            <button type="submit" className="text-white bg bg-[#1677ff] p-[10px_20px] rounded-[8px]">
+            <button type="submit" className="text-white bg-[#1677ff] p-[10px_20px] rounded-[8px]">
               Edit City
             </button>
           </div>
         </form>
       </Modal>
+
     </div>
   );
 }
