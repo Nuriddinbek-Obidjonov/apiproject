@@ -261,7 +261,7 @@ function Categories() {
             <input
               type="file"
               className="w-full p-[8px] border border-[#e5e7eb] rounded"
-              onChange={(e)=>setData({...data, images:e.target.files})}
+              onChange={(e)=>setData({...data, images:e.target.files[0]})}
             />
             {data.images && (
               <img className='w-[100px] mt-[15px]' src={`${urlImage}${data.images}`} alt="Selected Image" />
